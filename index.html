@@ -81,7 +81,7 @@
                     <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars">&#9733;</label>
                     <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star">&#9733;</label>
                  </div>
-                 <textarea name="review-text" placeholder="Write your review here" ></textarea>
+                 <textarea name="review-text" placeholder="Write your review here"></textarea>
                  <button type="submit">Submit Review</button>
             </form>
             <div id="reviews-list" class="reviews-list"></div></section>
@@ -99,7 +99,7 @@ function addReview(event) {
     const name = event.target['reviewer-name'].value.trim();
     const text = event.target['review-text'].value.trim();
     const rating = event.target['rating'].value;
-    if (!name || !text || !rating) return;
+    if (!name || !rating) return;
     const review = { name, text, rating };
     let reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
     reviews.unshift(review);
