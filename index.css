@@ -25,19 +25,32 @@ flex:1;
     height:25rem;
 
 }
-.welcome{
+ .welcome{
+    background-image: url("514006194_9834860213292705_4522413936133588580_n.jpg");
     flex:2;
     background-color:white;
     flex-direction: column;
     justify-content: center;
     align-self:flex-start;
+     background-size: cover;
+  background-position: center;
+  height: 70vh;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
+
+
+
 .welcome h1{
     font-size:4rem;
     padding:3rem;
+    color: white;
+      
 }
  .p1{
     font-size: 2rem;
+    color:white
     
 }
 .services{
@@ -323,6 +336,19 @@ flex:1;
     text-decoration: underline;
 }
 @media (max-width: 700px) {
+    .welcome{
+        
+        background-color: white;
+        flex-direction: column;
+        justify-content: center;
+        align-self: flex-start;
+        background-size: cover;
+        background-position: center;
+        height: 70vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
     .container {
         flex-direction: column;
         gap: 1.2rem;
@@ -350,6 +376,7 @@ flex:1;
     .p1 {
         font-size: 1rem;
         padding: 0 0.2rem;
+        background-color: rgba(0, 0, 0, 0.5);
     }
     .container2 {
         padding: 1rem 0.2rem;
@@ -373,7 +400,7 @@ flex:1;
         display: block;
     }
     .gallery {
-        grid-template-columns: 1fr;
+        grid-template-columns: inherit;
         gap: 1rem;
         padding: 1rem 0.2rem;
     }
