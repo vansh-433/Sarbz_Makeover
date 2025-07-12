@@ -107,40 +107,69 @@
             <p><b>Phone</b>- 9682108473</p>
         <p><b>Email</b>- </p></section>
 
-<script>
-// Store and display reviews using localStorage
-function addReview(event) {
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD2poJRLX2Upaq0C_JIr3avIBosXNYdkWc",
+    authDomain: "sarbz-makeover.firebaseapp.com",
+    databaseURL: "https://sarbz-makeover-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "sarbz-makeover",
+    storageBucket: "sarbz-makeover.appspot.com",
+    messagingSenderId: "282086773549",
+    appId: "1:282086773549:web:581c09fd378a4288bb39a4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  // Submit review function
+  window.addReview = function(event) {
     event.preventDefault();
     const name = event.target['reviewer-name'].value.trim();
     const text = event.target['review-text'].value.trim();
     const rating = event.target['rating'].value;
+
     if (!name || !rating) return;
-    const review = { name, text, rating };
-    let reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
-    reviews.unshift(review);
-    localStorage.setItem('reviews', JSON.stringify(reviews));
+
+    const review = { name, text, rating, timestamp: Date.now() };
+    push(ref(database, 'reviews'), review);
     event.target.reset();
-    showReviews();
-}
-function showReviews() {
-    const reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
-    const list = document.getElementById('reviews-list');
-    if (!list) return;
-    list.innerHTML = reviews.length ? reviews.map((r, i) =>
-        `<div class='review-item'><b>${r.name}</b><span class='stars'>${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5-r.rating)}</span><p>${r.text}</p><button class='delete-review' onclick='deleteReview(${i})'>Delete</button></div>`
-    ).join('') : '<p>No reviews yet.</p>';
-}
+  };
 
-function deleteReview(index) {
-    if (!confirm('Are you sure you want to delete this review?')) return;
-    let reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
-    reviews.splice(index, 1);
-    localStorage.setItem('reviews', JSON.stringify(reviews));
-    showReviews();
-}
+  // Delete review function
+  window.deleteReview = function(key) {
+    if (confirm("Are you sure you want to delete this review?")) {
+      const reviewRef = ref(database, 'reviews/' + key);
+      remove(reviewRef);
+    }
+  };
 
-document.addEventListener('DOMContentLoaded', showReviews);
+  // Show reviews function
+  const reviewsRef = ref(database, 'reviews');
+  const list = document.getElementById('reviews-list');
+
+  onValue(reviewsRef, (snapshot) => {
+    const data = snapshot.val();
+    if (!data) {
+      list.innerHTML = '<p>No reviews yet.</p>';
+      return;
+    }
+
+    const reviewHTML = Object.entries(data).reverse().map(([key, r]) =>
+      `<div class='review-item'>
+        <b>${r.name}</b>
+        <span class='stars'>${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+        <p>${r.text}</p>
+        <button class="delete-review" onclick="deleteReview('${key}')">Delete</button>
+      </div>`
+    ).join('');
+    
+    list.innerHTML = reviewHTML;
+  });
 </script>
+
 
 <script type="application/ld+json">
 {
